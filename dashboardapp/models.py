@@ -72,8 +72,8 @@ class Computer(models.Model):
     processor = models.CharField(max_length=64)
     memory = models.CharField(max_length=64)
     storage = models.CharField(max_length=64)
-    serial_number = models.CharField(max_length=64)
-    employee_name = models.CharField(max_length=64)
+    serial_number = models.CharField(max_length=64, null=True)
+    employee_name = models.CharField(max_length=64, null=True)
     pub_date = models.DateTimeField('date published')
 
 
