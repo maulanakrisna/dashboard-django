@@ -12,9 +12,9 @@ class Sti(models.Model):
 class Office(models.Model):
     sti = models.ForeignKey(Sti, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
-    email = models.EmailField()
-    phone = models.CharField(max_length=32)
-    fax = models.CharField(max_length=32)
+    email = models.EmailField(null=True)
+    phone = models.CharField(max_length=32, null=True)
+    fax = models.CharField(max_length=32, null=True)
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
