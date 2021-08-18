@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Sti(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
@@ -11,10 +11,8 @@ class Sti(models.Model):
 
 class Office(models.Model):
     sti = models.ForeignKey(Sti, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256)
-    email = models.EmailField(null=True)
-    phone = models.CharField(max_length=32, null=True)
-    fax = models.CharField(max_length=32, null=True)
+    name = models.CharField(max_length=256, unique=True)
+
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
@@ -23,22 +21,36 @@ class Office(models.Model):
 
 class Address(models.Model):
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    email = models.EmailField(null=True)
+    phone = models.CharField(max_length=32, null=True)
+    fax = models.CharField(max_length=32, null=True)
     address1 = models.CharField(max_length=256)
     address2 = models.CharField(max_length=256)
     zipcode = models.CharField(max_length=32)
     city = models.CharField(max_length=32)
+    province = models.CharField(max_length=64, null=True)
+    latitude = models.CharField(max_length=16, null=True)
+    longitude = models.CharField(max_length=16, null=True)
     pub_date = models.DateTimeField('date published')
 
 
 class Router(models.Model):
+    GOLD = 'GOLD'
+    SILVER = 'SILVER'
+    CHOICES = (
+        (GOLD, 'GOLD'),
+        (SILVER, 'SILVER'),
+    )
+
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
-    sid = models.CharField(max_length=32)
+    sid = models.CharField('S I D', max_length=32, unique=True)
+    type = models.CharField(max_length=16, choices=CHOICES, default=SILVER)
     brand = models.CharField(max_length=256)
     model = models.CharField(max_length=256)
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
-        return self.sid
+        return self.sid + ' | ' + self.office.name
 
 
 class Network(models.Model):
@@ -55,7 +67,7 @@ class Network(models.Model):
     )
 
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
-    sid = models.CharField(max_length=32)
+    sid = models.CharField(max_length=32, unique=True)
     type = models.CharField(max_length=32, choices=CHOICES, default=IPVPN)
     bandwidth = models.CharField(max_length=32)
     ip_address = models.CharField(max_length=64)
