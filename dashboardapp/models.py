@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 class Sti(models.Model):
@@ -12,8 +13,6 @@ class Sti(models.Model):
 class Office(models.Model):
     sti = models.ForeignKey(Sti, on_delete=models.CASCADE)
     name = models.CharField(max_length=256, unique=True)
-
-    pub_date = models.DateTimeField('date published')
 
     def __str__(self):
         return self.name
@@ -33,6 +32,9 @@ class Address(models.Model):
     longitude = models.CharField(max_length=16, null=True)
     pub_date = models.DateTimeField('date published')
 
+    def __str__(self):
+        return self.office.name + ', ' + self.city + ', ' + self.province
+
 
 class Router(models.Model):
     GOLD = 'GOLD'
@@ -47,10 +49,10 @@ class Router(models.Model):
     type = models.CharField(max_length=16, choices=CHOICES, default=SILVER)
     brand = models.CharField(max_length=256)
     model = models.CharField(max_length=256)
-    pub_date = models.DateTimeField('date published')
+    act_date = models.DateField('date activated', default=datetime.date.today)
 
     def __str__(self):
-        return self.sid + ' | ' + self.office.name
+        return self.sid
 
 
 class Network(models.Model):
@@ -67,11 +69,11 @@ class Network(models.Model):
     )
 
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
-    sid = models.CharField('S I D', max_length=32, unique=True)
+    sid = models.CharField('S I D', max_length=11, unique=True)
     type = models.CharField(max_length=32, choices=CHOICES, default=IPVPN)
     bandwidth = models.CharField(max_length=32)
     ip_address = models.CharField(max_length=32, null=True)
-    pub_date = models.DateTimeField('date published')
+    act_date = models.DateField('date activated', default=datetime.date.today)
 
     def __str__(self):
         return self.sid
@@ -86,7 +88,7 @@ class Computer(models.Model):
     storage = models.CharField(max_length=64)
     serial_number = models.CharField(max_length=64, null=True)
     employee_name = models.CharField(max_length=64, null=True)
-    pub_date = models.DateTimeField('date published')
+    act_date = models.DateField('date activated', default=datetime.date.today)
 
 
 class Itsupport(models.Model):
@@ -105,7 +107,7 @@ class Itsupport(models.Model):
     name = models.CharField(max_length=64)
     jobdescription = models.CharField(
         max_length=32, choices=CHOICES, default=FieldSupport)
-    pub_date = models.DateTimeField('date published')
+    act_date = models.DateField('date activated', default=datetime.date.today)
 
     def __str__(self):
         return self.name
