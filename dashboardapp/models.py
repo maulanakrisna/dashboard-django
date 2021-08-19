@@ -67,10 +67,10 @@ class Network(models.Model):
     )
 
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
-    sid = models.CharField(max_length=32, unique=True)
+    sid = models.CharField('S I D', max_length=32, unique=True)
     type = models.CharField(max_length=32, choices=CHOICES, default=IPVPN)
     bandwidth = models.CharField(max_length=32)
-    ip_address = models.CharField(max_length=64)
+    ip_address = models.CharField(max_length=32, null=True)
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
