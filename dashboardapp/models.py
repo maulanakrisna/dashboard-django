@@ -103,9 +103,9 @@ class Itsupport(models.Model):
     )
 
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
-    sid = models.CharField(max_length=32)
+    nik = models.CharField('N I K', max_length=32)
     name = models.CharField(max_length=64)
-    jobdescription = models.CharField(
+    job_description = models.CharField(
         max_length=32, choices=CHOICES, default=FieldSupport)
     act_date = models.DateField('date activated', default=datetime.date.today)
 
