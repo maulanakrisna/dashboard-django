@@ -11,7 +11,10 @@ class Sti(models.Model):
 
 
 class Office(models.Model):
-    sti = models.ForeignKey(Sti, on_delete=models.CASCADE)
+    sti = models.ForeignKey(
+        Sti,
+        on_delete=models.PROTECT
+    )
     name = models.CharField(max_length=256, unique=True)
 
     def __str__(self):
@@ -19,7 +22,7 @@ class Office(models.Model):
 
 
 class Address(models.Model):
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, on_delete=models.PROTECT)
     email = models.EmailField(null=True)
     phone = models.CharField(max_length=32, null=True)
     fax = models.CharField(max_length=32, null=True)
@@ -44,7 +47,7 @@ class Router(models.Model):
         (SILVER, 'SILVER'),
     )
 
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, on_delete=models.PROTECT)
     sid = models.CharField('S I D', max_length=32, unique=True)
     type = models.CharField(max_length=16, choices=CHOICES, default=SILVER)
     brand = models.CharField(max_length=256)
@@ -68,7 +71,7 @@ class Network(models.Model):
         (METRONET, "METRONET"),
     )
 
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, on_delete=models.PROTECT)
     sid = models.CharField('S I D', max_length=11, unique=True)
     type = models.CharField(max_length=32, choices=CHOICES, default=IPVPN)
     bandwidth = models.CharField(max_length=32)
@@ -80,14 +83,15 @@ class Network(models.Model):
 
 
 class Computer(models.Model):
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, on_delete=models.PROTECT)
     sid = models.CharField(max_length=32)
     monitor = models.CharField(max_length=64)
     processor = models.CharField(max_length=64)
     memory = models.CharField(max_length=64)
     storage = models.CharField(max_length=64)
     serial_number = models.CharField(max_length=64, null=True)
-    employee_name = models.CharField(max_length=64, null=True)
+    employee_name = models.CharField(
+        max_length=64, null=True, default='someone')
     act_date = models.DateField('date activated', default=datetime.date.today)
 
 
@@ -102,7 +106,7 @@ class Itsupport(models.Model):
             (FieldSupport, 'Field Support'),
     )
 
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(Office, on_delete=models.PROTECT)
     nik = models.CharField('N I K', max_length=32)
     name = models.CharField(max_length=64)
     job_description = models.CharField(

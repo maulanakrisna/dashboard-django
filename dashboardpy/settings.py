@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'sla_itsupport.apps.SlaItsupportConfig',
     'dashboardapp.apps.DashboardappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
